@@ -67,9 +67,9 @@ class JobCard extends React.Component {
                             </TextWithEllipsis>
                         </Grid> 
                         <Grid item xs={12} style={{maxHeight:"205px",overflow:"hidden"}}>   
-                            {this.props.data.jobDetailsFromCompany.substring(0, 350)}
+                            {this.props.data.jobDetailsFromCompany.substring(0, 300)}
                         
-                           <span style={{filter:"blur(1px)"}}> {this.props.data.jobDetailsFromCompany.substring(351, 500)} </span>
+                           <span style={{filter:"blur(1px)"}}> {this.props.data.jobDetailsFromCompany.substring(301, 500)} </span>
                         </Grid>
                         <Grid item xs={5}></Grid>
                         <Grid item xs={3}>
