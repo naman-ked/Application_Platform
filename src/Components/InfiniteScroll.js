@@ -78,19 +78,10 @@ const InfiniteScroll = () => {
   }, [fetchData]);
 
   const requestCompanyNameSearch = (searchedVal) => {
-    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+    if (searchedVal === "") {
       setSearchRows(items);
     }
-    else if (searchedVal !== "") {
-      if (searched2 !== "") {
-        requestRolesSearch(searched2);
-      }
-      else if (searched3 !== "") {
-        requestExpSearch(searched3);
-      }
-      else if (searched4 !== "") {
-        requestRemoteSearch(searched4);
-      }
+    else {
       const filteredRows = searchRows.filter((row) => {
         return row.companyName.toLowerCase().includes(searchedVal.toLowerCase());
       });
@@ -99,19 +90,10 @@ const InfiniteScroll = () => {
   };
 
   const requestRolesSearch = (searchedVal) => {
-    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+    if (searchedVal === "") {
       setSearchRows(items);
     }
-    else if (searchedVal !== "") {
-      if (searched1 !== "") {
-        requestCompanyNameSearch(searched1);
-      }
-      else if (searched3 !== "") {
-        requestExpSearch(searched3);
-      }
-      else if (searched4 !== "") {
-        requestRemoteSearch(searched4);
-      }
+    else{
       const filteredRows = searchRows.filter((row) => {
         return row.jobRole.toLowerCase().includes(searchedVal.toLowerCase());
       });
@@ -120,19 +102,10 @@ const InfiniteScroll = () => {
   };
 
   const requestExpSearch = (searchedVal) => {
-    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+    if (searchedVal === "") {
       setSearchRows(items);
     }
-    else if (searchedVal !== "") {
-      if (searched2 !== "") {
-        requestRolesSearch(searched2);
-      }
-      else if (searched1 !== "") {
-        requestCompanyNameSearch(searched1);
-      }
-      else if (searched4 !== "") {
-        requestRemoteSearch(searched4);
-      }
+    else{
       const filteredRows = searchRows.filter((row) => {
         return row.minExp.toLowerCase().includes(searchedVal.toLowerCase());
       });
@@ -141,19 +114,10 @@ const InfiniteScroll = () => {
   };
 
   const requestRemoteSearch = (searchedVal) => {
-    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+    if (searchedVal === "") {
       setSearchRows(items);
     }
-    else if (searchedVal !== "") {
-      if (searched1 !== "") {
-        requestCompanyNameSearch(searched1);
-      }
-      else if (searched3 !== "") {
-        requestExpSearch(searched3);
-      }
-      else if (searched2 !== "") {
-        requestRolesSearch(searched2);
-      }
+    else {
       const filteredRows = searchRows.filter((row) => {
         return row.location.toLowerCase().includes(searchedVal.toLowerCase());
       });
@@ -161,10 +125,6 @@ const InfiniteScroll = () => {
     }
   };
 
-  // const cancelSearch = () => {
-  // 	this.setState({ searched: "" });
-  // 	this.requestSearch("");
-  // };
 
   return (
     <div style={{ margin: "1%" }}>
