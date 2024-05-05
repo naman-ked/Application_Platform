@@ -73,7 +73,7 @@ class JobCard extends React.Component {
                         </Grid>
                         <Grid item xs={5}></Grid>
                         <Grid item xs={3}>
-                        <a href="/" style={{color:"blue",justifyContent:"center",textDecoration:"None"}}>View job</a>
+                        <a href={this.props.data.jdLink}  style={{color:"blue",justifyContent:"center",textDecoration:"None"}}>View job</a>
                         </Grid><Grid item xs={4} ></Grid>
                         <Grid item xs={8}>
                         <TextWithEllipsis
