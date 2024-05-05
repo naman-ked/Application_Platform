@@ -3,11 +3,17 @@ import axios from "axios";
 import JobCard from "./JobCard.js";
 import Loader from "./Loader";
 import Grid from "@mui/material/Grid";
+import SearchIcon from "@mui/icons-material/Search";
+import { TextField, InputAdornment } from "@mui/material";
 const InfiniteScroll = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [index, setIndex] = useState(2);
-
+  const [searched1, setSearched1] = useState("");
+  const [searched2, setSearched2] = useState("");
+  const [searched3, setSearched3] = useState("");
+  const [searched4, setSearched4] = useState("");
+  const [searchRows, setSearchRows] = useState([]);
   const fetchData = useCallback(async () => {
     if (isLoading) return;
 
@@ -31,7 +37,7 @@ const InfiniteScroll = () => {
         const response = await axios.post(
           "https://api.weekday.technology/adhoc/getSampleJdJSON?offset=1&limit=100"
         );
-        console.log("a",response.data.jdList)
+        console.log("a", response.data.jdList)
         setItems(response.data.jdList);
       } catch (error) {
         console.log(error);
@@ -57,10 +63,116 @@ const InfiniteScroll = () => {
     };
   }, [fetchData]);
 
+  const requestCompanyNameSearch = (searchedVal) => {
+		const filteredRows = items.filter((row) => {
+			return row.companyName.toLowerCase().includes(searchedVal.toLowerCase());
+		});
+		setSearchRows(filteredRows);
+	};
+
+  const requestRolesSearch = (searchedVal) => {
+		const filteredRows = items.filter((row) => {
+			return row.jobRole.toLowerCase().includes(searchedVal.toLowerCase());
+		});
+		setSearchRows(filteredRows);
+	};
+
+  const requestExpSearch = (searchedVal) => {
+		const filteredRows = items.filter((row) => {
+			return row.minExp.toLowerCase().includes(searchedVal.toLowerCase());
+		});
+		setSearchRows(filteredRows);
+	};
+
+  const requestRemoteSearch = (searchedVal) => {
+		const filteredRows = items.filter((row) => {
+			return row.location.toLowerCase().includes(searchedVal.toLowerCase());
+		});
+		setSearchRows(filteredRows);
+	};
+
+	// const cancelSearch = () => {
+	// 	this.setState({ searched: "" });
+	// 	this.requestSearch("");
+	// };
+
   return (
-      <div style={{margin:"1%"}}>
+    <div style={{ margin: "1%" }}>
+      <Grid container spacing={1}>
+      <Grid item xs={12} sm={2}>
+        <TextField
+          id="search"
+          type="search"
+          label="Search Company Name"
+          variant="outlined"
+          margin="dense"
+          size="small"
+          value={searched1}
+          onChange={(event) => {
+            setSearched1(event.target.value);
+            requestCompanyNameSearch(event.target.value);
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={2} >
+        <TextField
+          id="search"
+          type="search"
+          label="Roles"
+          variant="outlined"
+          margin="dense"
+          size="small"
+          value={searched2}
+          onChange={(event) => {
+            setSearched2(event.target.value);
+            requestRolesSearch(event.target.value);
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={2}>
+        <TextField
+          id="search"
+          type="search"
+          label="Experience"
+          variant="outlined"
+          margin="dense"
+          size="small"
+          value={searched3}
+          onChange={(event) => {
+            setSearched3(event.target.value);
+            requestExpSearch(event.target.value);
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} sm={2} >
+        <TextField
+          id="search"
+          type="search"
+          label="Remote"
+          variant="outlined"
+          margin="dense"
+          size="small"
+          value={searched4}
+          onChange={(event) => {
+            setSearched4(event.target.value);
+            requestRemoteSearch(event.target.value);
+          }}
+        />
+      </Grid>
+      </Grid>
+      <br /><br />
       <Grid container spacing={6}>
-        {items.map((item) => (
+        {searchRows.length > 0? searchRows.map((item) => (
+          <JobCard data={item} key={item.jdUid} />
+        )):
+        items.map((item) => (
           <JobCard data={item} key={item.jdUid} />
         ))}
       </Grid>
