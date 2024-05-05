@@ -23,6 +23,19 @@ const InfiniteScroll = () => {
       .post(`https://api.weekday.technology/adhoc/getSampleJdJSON?offset=${index}&limit=10`)
       .then((res) => {
         setItems((prevItems) => [...prevItems, ...res.data.jdList]);
+        setSearchRows((prevItems) => [...prevItems, ...res.data.jdList]);
+        if (searched1 !== "") {
+          requestCompanyNameSearch(searched1);
+        }
+        else if (searched2 !== "") {
+          requestRolesSearch(searched2);
+        }
+        else if (searched3 !== "") {
+          requestExpSearch(searched3);
+        }
+        else if (searched4 !== "") {
+          requestRemoteSearch(searched4);
+        }
       })
       .catch((err) => console.log(err));
     setIndex((prevIndex) => prevIndex + 1);
@@ -37,8 +50,9 @@ const InfiniteScroll = () => {
         const response = await axios.post(
           "https://api.weekday.technology/adhoc/getSampleJdJSON?offset=1&limit=100"
         );
-        console.log("a", response.data.jdList)
+        //console.log("a", response.data.jdList)
         setItems(response.data.jdList);
+        setSearchRows(response.data.jdList);
       } catch (error) {
         console.log(error);
       }
@@ -64,117 +78,171 @@ const InfiniteScroll = () => {
   }, [fetchData]);
 
   const requestCompanyNameSearch = (searchedVal) => {
-		const filteredRows = items.filter((row) => {
-			return row.companyName.toLowerCase().includes(searchedVal.toLowerCase());
-		});
-		setSearchRows(filteredRows);
-	};
+    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+      setSearchRows(items);
+    }
+    else if (searchedVal !== "") {
+      if (searched2 !== "") {
+        requestRolesSearch(searched2);
+      }
+      else if (searched3 !== "") {
+        requestExpSearch(searched3);
+      }
+      else if (searched4 !== "") {
+        requestRemoteSearch(searched4);
+      }
+      const filteredRows = searchRows.filter((row) => {
+        return row.companyName.toLowerCase().includes(searchedVal.toLowerCase());
+      });
+      setSearchRows(filteredRows);
+    }
+  };
 
   const requestRolesSearch = (searchedVal) => {
-		const filteredRows = items.filter((row) => {
-			return row.jobRole.toLowerCase().includes(searchedVal.toLowerCase());
-		});
-		setSearchRows(filteredRows);
-	};
+    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+      setSearchRows(items);
+    }
+    else if (searchedVal !== "") {
+      if (searched1 !== "") {
+        requestCompanyNameSearch(searched1);
+      }
+      else if (searched3 !== "") {
+        requestExpSearch(searched3);
+      }
+      else if (searched4 !== "") {
+        requestRemoteSearch(searched4);
+      }
+      const filteredRows = searchRows.filter((row) => {
+        return row.jobRole.toLowerCase().includes(searchedVal.toLowerCase());
+      });
+      setSearchRows(filteredRows);
+    }
+  };
 
   const requestExpSearch = (searchedVal) => {
-		const filteredRows = items.filter((row) => {
-			return row.minExp.toLowerCase().includes(searchedVal.toLowerCase());
-		});
-		setSearchRows(filteredRows);
-	};
+    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+      setSearchRows(items);
+    }
+    else if (searchedVal !== "") {
+      if (searched2 !== "") {
+        requestRolesSearch(searched2);
+      }
+      else if (searched1 !== "") {
+        requestCompanyNameSearch(searched1);
+      }
+      else if (searched4 !== "") {
+        requestRemoteSearch(searched4);
+      }
+      const filteredRows = searchRows.filter((row) => {
+        return row.minExp.toLowerCase().includes(searchedVal.toLowerCase());
+      });
+      setSearchRows(filteredRows);
+    }
+  };
 
   const requestRemoteSearch = (searchedVal) => {
-		const filteredRows = items.filter((row) => {
-			return row.location.toLowerCase().includes(searchedVal.toLowerCase());
-		});
-		setSearchRows(filteredRows);
-	};
+    if (searched1 === "" && searched2 === "" && searched3 === "" && searched4 === "") {
+      setSearchRows(items);
+    }
+    else if (searchedVal !== "") {
+      if (searched1 !== "") {
+        requestCompanyNameSearch(searched1);
+      }
+      else if (searched3 !== "") {
+        requestExpSearch(searched3);
+      }
+      else if (searched2 !== "") {
+        requestRolesSearch(searched2);
+      }
+      const filteredRows = searchRows.filter((row) => {
+        return row.location.toLowerCase().includes(searchedVal.toLowerCase());
+      });
+      setSearchRows(filteredRows);
+    }
+  };
 
-	// const cancelSearch = () => {
-	// 	this.setState({ searched: "" });
-	// 	this.requestSearch("");
-	// };
+  // const cancelSearch = () => {
+  // 	this.setState({ searched: "" });
+  // 	this.requestSearch("");
+  // };
 
   return (
     <div style={{ margin: "1%" }}>
       <Grid container spacing={1}>
-      <Grid item xs={12} sm={2}>
-        <TextField
-          id="search"
-          type="search"
-          label="Search Company Name"
-          variant="outlined"
-          margin="dense"
-          size="small"
-          value={searched1}
-          onChange={(event) => {
-            setSearched1(event.target.value);
-            requestCompanyNameSearch(event.target.value);
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} sm={2} >
-        <TextField
-          id="search"
-          type="search"
-          label="Roles"
-          variant="outlined"
-          margin="dense"
-          size="small"
-          value={searched2}
-          onChange={(event) => {
-            setSearched2(event.target.value);
-            requestRolesSearch(event.target.value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} sm={2}>
-        <TextField
-          id="search"
-          type="search"
-          label="Experience"
-          variant="outlined"
-          margin="dense"
-          size="small"
-          value={searched3}
-          onChange={(event) => {
-            setSearched3(event.target.value);
-            requestExpSearch(event.target.value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} sm={2} >
-        <TextField
-          id="search"
-          type="search"
-          label="Remote"
-          variant="outlined"
-          margin="dense"
-          size="small"
-          value={searched4}
-          onChange={(event) => {
-            setSearched4(event.target.value);
-            requestRemoteSearch(event.target.value);
-          }}
-        />
-      </Grid>
+        <Grid item xs={12} sm={2}>
+          <TextField
+            id="search"
+            type="search"
+            label="Search Company Name"
+            variant="outlined"
+            margin="dense"
+            size="small"
+            value={searched1}
+            onChange={(event) => {
+              setSearched1(event.target.value);
+              requestCompanyNameSearch(event.target.value);
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={2} >
+          <TextField
+            id="search"
+            type="search"
+            label="Roles"
+            variant="outlined"
+            margin="dense"
+            size="small"
+            value={searched2}
+            onChange={(event) => {
+              setSearched2(event.target.value);
+              requestRolesSearch(event.target.value);
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={2}>
+          <TextField
+            id="search"
+            type="search"
+            label="Experience"
+            variant="outlined"
+            margin="dense"
+            size="small"
+            value={searched3}
+            onChange={(event) => {
+              setSearched3(event.target.value);
+              requestExpSearch(event.target.value);
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={2} >
+          <TextField
+            id="search"
+            type="search"
+            label="Remote"
+            variant="outlined"
+            margin="dense"
+            size="small"
+            value={searched4}
+            onChange={(event) => {
+              setSearched4(event.target.value);
+              requestRemoteSearch(event.target.value);
+            }}
+          />
+        </Grid>
       </Grid>
       <br /><br />
       <Grid container spacing={6}>
-        {searchRows.length > 0? searchRows.map((item) => (
-          <JobCard data={item} key={item.jdUid} />
-        )):
-        items.map((item) => (
-          <JobCard data={item} key={item.jdUid} />
-        ))}
+        {
+          searchRows.map((item) => (
+            <JobCard data={item} key={item.jdUid} />
+          ))}
       </Grid>
       {isLoading && <Loader />}
     </div>
